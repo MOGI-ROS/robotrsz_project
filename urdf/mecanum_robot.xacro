@@ -1,0 +1,328 @@
+<?xml version='1.0'?>
+
+<robot name="mogi_bot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- STEP 3 - Gazebo plugin -->
+  <xacro:include filename="$(find robotrsz_project)/urdf/mecanum_robot.gazebo" />
+
+  <!-- STEP 4 - RViz colors -->
+  <xacro:include filename="$(find robotrsz_project)/urdf/materials.xacro" />
+
+  <!-- Include wheel macros -->
+  <xacro:include filename="$(find bme_gazebo_basics)/urdf/wheel.xacro" />
+
+  <!-- Pi -->
+  <xacro:property name="M_PI" value="3.14159"/>
+
+  <!-- Base Size -->
+  <xacro:property name="base_x_size" value="0.256" />
+  <xacro:property name="base_y_size" value="0.256" />
+  <xacro:property name="base_z_size" value="0.088" />
+
+  <!-- Wheel Mounting Positions -->
+  <xacro:property name="wheelbase" value="0.128" />
+  <xacro:property name="track" value="0.3" />
+  <xacro:property name="wheel_vertical_offset" value="-0.025" />
+
+  <!-- Wheel Properties -->
+  <xacro:property name="wheel_length" value="0.0315" />
+  <xacro:property name="wheel_radius" value="0.03" />
+
+  <!-- STEP 1 - Robot chassis -->
+  <link name="base_footprint"></link>
+
+  <joint name="base_footprint_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_footprint"/>
+    <child link="base_link" />
+  </joint>
+
+  <!-- Robot chassis -->
+  <link name='base_link'>
+    <pose>0 0 0.1 0 0 0</pose>
+
+    <inertial>
+      <mass value="15.0"/>
+      <origin xyz="0.0 0 0" rpy="0 0 0"/>
+      <inertia
+          ixx="0.1" ixy="0" ixz="0"
+          iyy="0.1" iyz="0"
+          izz="0.1"
+      />
+    </inertial>
+
+    <collision name='collision'>
+      <origin xyz="0 0 0" rpy="0 0 0"/> 
+      <geometry>
+        <box size="${base_x_size} ${base_y_size} ${base_z_size}"/>
+      </geometry>
+    </collision>
+
+    <visual name='base_link_visual'>
+      <origin xyz="0 0 -${base_z_size/2}" rpy="0 0 ${M_PI/2}"/>
+      <geometry>
+        <!-- box size="${base_x_size} ${base_y_size} ${base_z_size}" /-->
+        <mesh filename = "package://robotrsz_project/meshes/mecanum_frame.dae"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+
+  </link>
+
+  <!-- STEP 2 - Wheels -->
+  <joint type="continuous" name="front_left_wheel_joint">
+    <origin xyz="${wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0"/>
+    <child link="front_left_wheel"/>
+    <parent link="base_link"/>
+    <axis xyz="0 1 0" rpy="0 0 0"/>
+    <limit effort="10000" velocity="1000"/>
+    <dynamics damping="1.0" friction="1.0"/>
+    
+  </joint>
+
+  <link name='front_left_wheel'>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+      <inertia
+          ixx="0.001354166" ixy="0" ixz="0"
+          iyy="0.001354166" iyz="0"
+          izz="0.0025"
+      />
+    </inertial>
+
+    <collision name='collision'>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/> 
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_length}"/>
+      </geometry>
+    </collision>
+
+    <visual name='front_left_wheel_visual'>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+      <geometry>
+        <!--cylinder radius=".1" length=".05"/-->
+        <mesh filename = "package://robotrsz_project/meshes/mecanum_wheel.dae"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+
+  <joint type="continuous" name="front_right_wheel_joint">
+    <origin xyz="${wheelbase/2} -${track/2} ${wheel_vertical_offset}" rpy="0 0 0"/>
+    <child link="front_right_wheel"/>
+    <parent link="base_link"/>
+    <axis xyz="0 1 0" rpy="0 0 0"/>
+    <limit effort="10000" velocity="1000"/>
+    <dynamics damping="1.0" friction="1.0"/>
+  </joint>
+
+  <link name='front_right_wheel'>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+      <inertia
+          ixx="0.001354166" ixy="0" ixz="0"
+          iyy="0.001354166" iyz="0"
+          izz="0.0025"
+      />
+    </inertial>
+
+    <collision name='collision'>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/> 
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_length}"/>
+      </geometry>
+    </collision>
+
+    <visual name='front_right_wheel_visual'>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+      <geometry>
+        <!--cylinder radius=".1" length=".05"/-->
+        <mesh filename = "package://robotrsz_project/meshes/mecanum_wheel.dae"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+
+  <joint type="continuous" name="rear_left_wheel_joint">
+    <origin xyz="-${wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0"/>
+    <child link="rear_left_wheel"/>
+    <parent link="base_link"/>
+    <axis xyz="0 1 0" rpy="0 0 0"/>
+    <limit effort="10000" velocity="1000"/>
+    <dynamics damping="1.0" friction="1.0"/>
+  </joint>
+
+  <link name='rear_left_wheel'>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+      <inertia
+          ixx="0.001354166" ixy="0" ixz="0"
+          iyy="0.001354166" iyz="0"
+          izz="0.0025"
+      />
+    </inertial>
+
+    <collision name='collision'>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/> 
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_length}"/>
+      </geometry>
+    </collision>
+
+    <visual name='rear_left_wheel_visual'>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+      <geometry>
+        <!--cylinder radius=".1" length=".05"/-->
+        <mesh filename = "package://robotrsz_project/meshes/mecanum_wheel.dae"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+
+  <joint type="continuous" name="rear_right_wheel_joint">
+    <origin xyz="-${wheelbase/2} -${track/2} ${wheel_vertical_offset}" rpy="0 0 0"/>
+    <child link="rear_right_wheel"/>
+    <parent link="base_link"/>
+    <axis xyz="0 1 0" rpy="0 0 0"/>
+    <limit effort="10000" velocity="1000"/>
+    <dynamics damping="1.0" friction="1.0"/>
+  </joint>
+
+  <link name='rear_right_wheel'>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+      <inertia
+          ixx="0.001354166" ixy="0" ixz="0"
+          iyy="0.001354166" iyz="0"
+          izz="0.0025"
+      />
+    </inertial>
+
+    <collision name='collision'>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/> 
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="${wheel_length}"/>
+      </geometry>
+    </collision>
+
+    <visual name='rear_right_wheel_visual'>
+      <origin xyz="0 0 0" rpy="0 1.5707 1.5707"/>
+      <geometry>
+        <!--cylinder radius=".1" length=".05"/-->
+        <mesh filename = "package://robotrsz_project/meshes/mecanum_wheel.dae"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+
+  <!-- STEP 4 - Gazebo physics -->
+  <gazebo reference="front_left_wheel">
+    <!-- kp and kd for rubber -->
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <mu1>1.5</mu1>
+    <mu2>1.5</mu2>
+    <fdir1>1 0 0</fdir1>
+    <maxVel>1.0</maxVel>
+    <minDepth>0.00</minDepth>
+  </gazebo>
+
+  <gazebo reference="front_right_wheel">
+    <!-- kp and kd for rubber -->
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <mu1>1.5</mu1>
+    <mu2>1.5</mu2>
+    <fdir1>1 0 0</fdir1>
+    <maxVel>1.0</maxVel>
+    <minDepth>0.00</minDepth>
+  </gazebo>
+
+  <gazebo reference="rear_left_wheel">
+    <!-- kp and kd for rubber -->
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <mu1>1.5</mu1>
+    <mu2>1.5</mu2>
+    <fdir1>1 0 0</fdir1>
+    <maxVel>1.0</maxVel>
+    <minDepth>0.00</minDepth>
+  </gazebo>
+
+  <gazebo reference="rear_right_wheel">
+    <!-- kp and kd for rubber -->
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <mu1>1.5</mu1>
+    <mu2>1.5</mu2>
+    <fdir1>1 0 0</fdir1>
+    <maxVel>1.0</maxVel>
+    <minDepth>0.00</minDepth>
+  </gazebo>
+
+  <!-- Camera -->
+  <joint type="fixed" name="camera_joint">
+    <origin xyz="0.125 0 0.15" rpy="0 ${M_PI/18} 0"/>
+    <child link="camera_link"/>
+    <parent link="base_link"/>
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <link name='camera_link'>
+    <pose>0 0 0 0 0 0</pose>
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia
+          ixx="1e-6" ixy="0" ixz="0"
+          iyy="1e-6" iyz="0"
+          izz="1e-6"
+      />
+    </inertial>
+
+    <collision name='collision'>
+      <origin xyz="0 0 0" rpy="0 0 0"/> 
+      <geometry>
+        <box size=".05 .05 .05"/>
+      </geometry>
+    </collision>
+
+    <visual name='camera_link_visual'>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size=".05 .05 .05"/>
+      </geometry>
+    </visual>
+
+  </link>
+
+  <gazebo reference="camera_link">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+    <joint type="fixed" name="camera_optical_joint">
+    <origin xyz="0 0 0" rpy="-1.5707 0 -1.5707"/>
+    <child link="camera_link_optical"/>
+    <parent link="camera_link"/>
+  </joint>
+
+  <link name="camera_link_optical">
+  </link>
+
+  <!-- STEP 4 - Gazebo colors -->
+  <!--gazebo reference="left_wheel">
+    <material>Gazebo/Green</material>
+  </gazebo>
+  <gazebo reference="right_wheel">
+    <material>Gazebo/Green</material>
+  </gazebo>
+  <gazebo reference="base_link">
+    <material>Gazebo/Orange</material>
+  </gazebo-->
+
+
+</robot>
