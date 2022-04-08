@@ -110,7 +110,7 @@
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/home/balazs/catkin_ws/src/Week-3-4-Gazebo-basics/bme_gazebo_basics/meshes/track.dae</uri>
+              <uri>model://meshes/track.dae</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
@@ -123,7 +123,7 @@
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/home/balazs/catkin_ws/src/Week-3-4-Gazebo-basics/bme_gazebo_basics/meshes/track.dae</uri>
+              <uri>model://meshes/track.dae</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
