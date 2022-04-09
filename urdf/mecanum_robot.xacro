@@ -9,7 +9,7 @@
   <xacro:include filename="$(find robotrsz_project)/urdf/materials.xacro" />
 
   <!-- Include wheel macros -->
-  <xacro:include filename="$(find bme_gazebo_basics)/urdf/wheel.xacro" />
+  <xacro:include filename="$(find robotrsz_project)/urdf/wheel.xacro" />
 
   <!-- Pi -->
   <xacro:property name="M_PI" value="3.14159"/>
